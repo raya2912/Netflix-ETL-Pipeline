@@ -5,7 +5,22 @@ This project is an end-to-end Extract, Transform, Load (ETL) pipeline built with
 
 ## Architecture
 
-![Architecture](architecture_diagram.png) *(Placeholder for diagram)*
+```mermaid
+graph TD
+    A[(Kaggle CSV Dataset)] -->|Extract| B(Pandas DataFrame)
+    B -->|Clean & Validate| C(Transform Phase)
+    C -->|Impute Nulls & Deduplicate| D{Feature Engineering}
+    D -->|Derived: content_age, year_added| E(Load Phase)
+    E -->|SQLAlchemy ORM| F[(Normalized SQLite/PostgreSQL)]
+    
+    subgraph Relational Database Schema
+        F --> G[Content Fact Table]
+        F --> H[Director Dimension]
+        F --> I[Cast Dimension]
+        F --> J[Country Dimension]
+        F --> K[Category Dimension]
+    end
+```
 
 1. **Extract**: Reads the raw CSV data, validating column presence.
 2. **Transform**: Cleans data, handles missing values (imputes 'Unknown'), dedupes records, formats dates, and generates derived features like `content_age` and `year_added`.
