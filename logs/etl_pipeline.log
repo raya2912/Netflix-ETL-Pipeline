@@ -1,0 +1,244 @@
+2026-06-21 00:43:58,117 - __main__ - INFO - ========================================
+2026-06-21 00:43:58,118 - __main__ - INFO - Starting Netflix ETL Pipeline
+2026-06-21 00:43:58,119 - __main__ - INFO - ========================================
+2026-06-21 00:43:58,119 - __main__ - INFO - 
+--- PHASE 1: EXTRACT ---
+2026-06-21 00:43:58,120 - src.extract - INFO - Starting extraction from C:\Users\Raya\.gemini\antigravity\scratch\Netflix_ETL_Pipeline\data\raw\netflix_titles.csv
+2026-06-21 00:43:58,306 - src.extract - INFO - Successfully extracted 8807 records.
+2026-06-21 00:43:58,307 - __main__ - INFO - 
+--- PHASE 2: TRANSFORM ---
+2026-06-21 00:43:58,310 - src.transform - INFO - Starting transformation phase...
+2026-06-21 00:43:58,338 - src.transform - INFO - Dropped 10 rows due to critical missing values.
+2026-06-21 00:43:58,784 - src.transform - INFO - Derived features 'year_added' and 'content_age' created.
+2026-06-21 00:43:58,785 - src.transform - INFO - Transformation phase complete.
+2026-06-21 00:43:58,785 - __main__ - INFO - 
+--- PHASE 3: LOAD ---
+2026-06-21 00:43:59,336 - src.load - INFO - Starting load phase...
+2026-06-21 00:46:12,427 - src.load - INFO - Loaded 500 records...
+2026-06-21 00:50:20,552 - src.load - INFO - Loaded 1000 records...
+2026-06-21 00:50:27,198 - __main__ - INFO - ========================================
+2026-06-21 00:50:27,198 - __main__ - INFO - Starting Netflix ETL Pipeline
+2026-06-21 00:50:27,198 - __main__ - INFO - ========================================
+2026-06-21 00:50:27,199 - __main__ - INFO - 
+--- PHASE 1: EXTRACT ---
+2026-06-21 00:50:27,199 - src.extract - INFO - Starting extraction from C:\Users\Raya\.gemini\antigravity\scratch\Netflix_ETL_Pipeline\data\raw\netflix_titles.csv
+2026-06-21 00:50:27,256 - src.extract - INFO - Successfully extracted 8807 records.
+2026-06-21 00:50:27,257 - __main__ - INFO - 
+--- PHASE 2: TRANSFORM ---
+2026-06-21 00:50:27,258 - src.transform - INFO - Starting transformation phase...
+2026-06-21 00:50:27,268 - src.transform - INFO - Dropped 10 rows due to critical missing values.
+2026-06-21 00:50:27,373 - src.transform - INFO - Derived features 'year_added' and 'content_age' created.
+2026-06-21 00:50:27,373 - src.transform - INFO - Transformation phase complete.
+2026-06-21 00:50:27,373 - __main__ - INFO - 
+--- PHASE 3: LOAD ---
+2026-06-21 00:50:27,405 - src.load - INFO - Starting load phase...
+2026-06-21 00:51:04,699 - src.load - INFO - Loaded 500 records...
+2026-06-21 00:51:14,284 - src.load - ERROR - Error during load phase: (raised as a result of Query-invoked autoflush; consider using a session.no_autoflush block if this flush is occurring prematurely)
+(sqlite3.IntegrityError) UNIQUE constraint failed: content_cast.show_id, content_cast.cast_id
+[SQL: INSERT INTO content_cast (show_id, cast_id) VALUES (?, ?)]
+[parameters: [('s1632', 8103), ('s1632', 8103)]]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+2026-06-21 00:51:14,286 - __main__ - CRITICAL - ETL Pipeline failed due to an error: (raised as a result of Query-invoked autoflush; consider using a session.no_autoflush block if this flush is occurring prematurely)
+(sqlite3.IntegrityError) UNIQUE constraint failed: content_cast.show_id, content_cast.cast_id
+[SQL: INSERT INTO content_cast (show_id, cast_id) VALUES (?, ?)]
+[parameters: [('s1632', 8103), ('s1632', 8103)]]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+2026-06-21 00:51:14,287 - __main__ - ERROR - (raised as a result of Query-invoked autoflush; consider using a session.no_autoflush block if this flush is occurring prematurely)
+(sqlite3.IntegrityError) UNIQUE constraint failed: content_cast.show_id, content_cast.cast_id
+[SQL: INSERT INTO content_cast (show_id, cast_id) VALUES (?, ?)]
+[parameters: [('s1632', 8103), ('s1632', 8103)]]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+Traceback (most recent call last):
+  File "C:\Users\Raya\.gemini\antigravity\scratch\Netflix_ETL_Pipeline\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1938, in _exec_single_context
+    self.dialect.do_executemany(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        cursor,
+        ^^^^^^^
+    ...<2 lines>...
+        context,
+        ^^^^^^^^
+    )
+    ^
+  File "C:\Users\Raya\.gemini\antigravity\scratch\Netflix_ETL_Pipeline\venv\Lib\site-packages\sqlalchemy\engine\default.py", line 949, in do_executemany
+    cursor.executemany(statement, parameters)
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+sqlite3.IntegrityError: UNIQUE constraint failed: content_cast.show_id, content_cast.cast_id
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\Raya\.gemini\antigravity\scratch\Netflix_ETL_Pipeline\src\main.py", line 35, in run_etl
+    loader.load(transformed_df)
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\Users\Raya\.gemini\antigravity\scratch\Netflix_ETL_Pipeline\src\load.py", line 89, in load
+    cast_obj = self._get_or_create_dimension(CastMember, self._cast_cache, cast_name)
+  File "C:\Users\Raya\.gemini\antigravity\scratch\Netflix_ETL_Pipeline\src\load.py", line 33, in _get_or_create_dimension
+    instance = self.session.query(model).filter_by(name=name).first()
+  File "C:\Users\Raya\.gemini\antigravity\scratch\Netflix_ETL_Pipeline\venv\Lib\site-packages\sqlalchemy\orm\query.py", line 2766, in first
+    return self.limit(1)._iter().first()  # type: ignore
+           ~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Raya\.gemini\antigravity\scratch\Netflix_ETL_Pipeline\venv\Lib\site-packages\sqlalchemy\orm\query.py", line 2864, in _iter
+    result: Union[ScalarResult[_T], Result[_T]] = self.session.execute(
+                                                  ~~~~~~~~~~~~~~~~~~~~^
+        statement,
+        ^^^^^^^^^^
+        params,
+        ^^^^^^^
+        execution_options={"_sa_orm_load_options": self.load_options},
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Raya\.gemini\antigravity\scratch\Netflix_ETL_Pipeline\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2373, in execute
+    return self._execute_internal(
+           ~~~~~~~~~~~~~~~~~~~~~~^
+        statement,
+        ^^^^^^^^^^
+    ...<4 lines>...
+        _add_event=_add_event,
+        ^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Raya\.gemini\antigravity\scratch\Netflix_ETL_Pipeline\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2250, in _execute_internal
+    ) = compile_state_cls.orm_pre_session_exec(
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self,
+        ^^^^^
+    ...<4 lines>...
+        False,
+        ^^^^^^
+    )
+    ^
+  File "C:\Users\Raya\.gemini\antigravity\scratch\Netflix_ETL_Pipeline\venv\Lib\site-packages\sqlalchemy\orm\context.py", line 577, in orm_pre_session_exec
+    session._autoflush()
+    ~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Raya\.gemini\antigravity\scratch\Netflix_ETL_Pipeline\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 3073, in _autoflush
+    raise e.with_traceback(sys.exc_info()[2])
+  File "C:\Users\Raya\.gemini\antigravity\scratch\Netflix_ETL_Pipeline\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 3062, in _autoflush
+    self.flush()
+    ~~~~~~~~~~^^
+  File "C:\Users\Raya\.gemini\antigravity\scratch\Netflix_ETL_Pipeline\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 4353, in flush
+    self._flush(objects)
+    ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\Raya\.gemini\antigravity\scratch\Netflix_ETL_Pipeline\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 4488, in _flush
+    with util.safe_reraise():
+         ~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Raya\.gemini\antigravity\scratch\Netflix_ETL_Pipeline\venv\Lib\site-packages\sqlalchemy\util\langhelpers.py", line 122, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "C:\Users\Raya\.gemini\antigravity\scratch\Netflix_ETL_Pipeline\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 4449, in _flush
+    flush_context.execute()
+    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Raya\.gemini\antigravity\scratch\Netflix_ETL_Pipeline\venv\Lib\site-packages\sqlalchemy\orm\unitofwork.py", line 465, in execute
+    rec.execute(self)
+    ~~~~~~~~~~~^^^^^^
+  File "C:\Users\Raya\.gemini\antigravity\scratch\Netflix_ETL_Pipeline\venv\Lib\site-packages\sqlalchemy\orm\unitofwork.py", line 641, in execute
+    util.preloaded.orm_persistence.save_obj(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self.mapper,
+        ^^^^^^^^^^^^
+        uow.states_for_mapper_hierarchy(self.mapper, False, False),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        uow,
+        ^^^^
+    )
+    ^
+  File "C:\Users\Raya\.gemini\antigravity\scratch\Netflix_ETL_Pipeline\venv\Lib\site-packages\sqlalchemy\orm\persistence.py", line 94, in save_obj
+    _emit_insert_statements(
+    ~~~~~~~~~~~~~~~~~~~~~~~^
+        base_mapper,
+        ^^^^^^^^^^^^
+    ...<3 lines>...
+        insert,
+        ^^^^^^^
+    )
+    ^
+  File "C:\Users\Raya\.gemini\antigravity\scratch\Netflix_ETL_Pipeline\venv\Lib\site-packages\sqlalchemy\orm\persistence.py", line 1049, in _emit_insert_statements
+    result = connection.execute(
+        statement, multiparams, execution_options=execution_options
+    )
+  File "C:\Users\Raya\.gemini\antigravity\scratch\Netflix_ETL_Pipeline\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1421, in execute
+    return meth(
+        self,
+        distilled_parameters,
+        execution_options or NO_OPTIONS,
+    )
+  File "C:\Users\Raya\.gemini\antigravity\scratch\Netflix_ETL_Pipeline\venv\Lib\site-packages\sqlalchemy\sql\elements.py", line 526, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self, distilled_params, execution_options
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Raya\.gemini\antigravity\scratch\Netflix_ETL_Pipeline\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1643, in _execute_clauseelement
+    ret = self._execute_context(
+        dialect,
+    ...<8 lines>...
+        cache_hit=cache_hit,
+    )
+  File "C:\Users\Raya\.gemini\antigravity\scratch\Netflix_ETL_Pipeline\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1848, in _execute_context
+    return self._exec_single_context(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~^
+        dialect, context, statement, parameters
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Raya\.gemini\antigravity\scratch\Netflix_ETL_Pipeline\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1988, in _exec_single_context
+    self._handle_dbapi_exception(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        e, str_statement, effective_parameters, cursor, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Raya\.gemini\antigravity\scratch\Netflix_ETL_Pipeline\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 2365, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "C:\Users\Raya\.gemini\antigravity\scratch\Netflix_ETL_Pipeline\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1938, in _exec_single_context
+    self.dialect.do_executemany(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        cursor,
+        ^^^^^^^
+    ...<2 lines>...
+        context,
+        ^^^^^^^^
+    )
+    ^
+  File "C:\Users\Raya\.gemini\antigravity\scratch\Netflix_ETL_Pipeline\venv\Lib\site-packages\sqlalchemy\engine\default.py", line 949, in do_executemany
+    cursor.executemany(statement, parameters)
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+sqlalchemy.exc.IntegrityError: (raised as a result of Query-invoked autoflush; consider using a session.no_autoflush block if this flush is occurring prematurely)
+(sqlite3.IntegrityError) UNIQUE constraint failed: content_cast.show_id, content_cast.cast_id
+[SQL: INSERT INTO content_cast (show_id, cast_id) VALUES (?, ?)]
+[parameters: [('s1632', 8103), ('s1632', 8103)]]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+2026-06-21 00:53:00,973 - __main__ - INFO - ========================================
+2026-06-21 00:53:00,973 - __main__ - INFO - Starting Netflix ETL Pipeline
+2026-06-21 00:53:00,973 - __main__ - INFO - ========================================
+2026-06-21 00:53:00,974 - __main__ - INFO - 
+--- PHASE 1: EXTRACT ---
+2026-06-21 00:53:00,974 - src.extract - INFO - Starting extraction from C:\Users\Raya\.gemini\antigravity\scratch\Netflix_ETL_Pipeline\data\raw\netflix_titles.csv
+2026-06-21 00:53:01,027 - src.extract - INFO - Successfully extracted 8807 records.
+2026-06-21 00:53:01,028 - __main__ - INFO - 
+--- PHASE 2: TRANSFORM ---
+2026-06-21 00:53:01,028 - src.transform - INFO - Starting transformation phase...
+2026-06-21 00:53:01,036 - src.transform - INFO - Dropped 10 rows due to critical missing values.
+2026-06-21 00:53:01,132 - src.transform - INFO - Derived features 'year_added' and 'content_age' created.
+2026-06-21 00:53:01,132 - src.transform - INFO - Transformation phase complete.
+2026-06-21 00:53:01,132 - __main__ - INFO - 
+--- PHASE 3: LOAD ---
+2026-06-21 00:53:01,153 - src.load - INFO - Starting load phase...
+2026-06-21 00:53:34,409 - src.load - INFO - Loaded 500 records...
+2026-06-21 00:54:23,532 - src.load - INFO - Loaded 1000 records...
+2026-06-21 00:55:42,930 - src.load - INFO - Loaded 1500 records...
+2026-06-21 00:56:56,535 - src.load - INFO - Loaded 2000 records...
+2026-06-21 00:58:54,151 - src.load - INFO - Loaded 2500 records...
+2026-06-21 01:00:45,680 - src.load - INFO - Loaded 3000 records...
+2026-06-21 01:03:09,080 - src.load - INFO - Loaded 3500 records...
+2026-06-21 01:05:11,812 - src.load - INFO - Loaded 4000 records...
+2026-06-21 01:07:22,980 - src.load - INFO - Loaded 4500 records...
+2026-06-21 01:10:10,782 - src.load - INFO - Loaded 5000 records...
+2026-06-21 01:12:50,720 - src.load - INFO - Loaded 5500 records...
+2026-06-21 01:15:19,889 - src.load - INFO - Loaded 6000 records...
+2026-06-21 01:18:54,559 - src.load - INFO - Loaded 6500 records...
+2026-06-21 01:21:12,927 - src.load - INFO - Loaded 7000 records...
+2026-06-21 01:21:51,820 - src.load - INFO - Load phase complete. Inserted 7165 new content records.
+2026-06-21 01:21:51,830 - __main__ - INFO - ========================================
+2026-06-21 01:21:51,830 - __main__ - INFO - ETL Pipeline completed successfully in 1730.86 seconds.
+2026-06-21 01:21:51,831 - __main__ - INFO - ========================================
