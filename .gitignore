@@ -1,0 +1,18 @@
+# Python
+venv/
+__pycache__/
+*.pyc
+
+# Databases
+*.db
+*.sqlite3
+
+# Logs
+logs/etl_pipeline.log
+
+# Private files
+interview_prep.md
+
+# OS generated files
+.DS_Store
+Thumbs.db
